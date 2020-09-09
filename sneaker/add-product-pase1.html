@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,inital-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Bootstrap CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- FontAwesome CDN-->
+    <script src="https://kit.fontawesome.com/7fefb669ea.js" crossorigin="anonymous"></script>
+
+    <!--Custom Stylesheet-->
+    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" href="./css/swiper.min.css"/>
+
+    
+    
+    <!--map-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script>
+        function initMap() {
+            var location = {lat: 13.756331, lng: 100.501762};
+            var map = new google.maps.Map(document.getElementById("Map-Search"),{
+                zoom: 4,
+                center: location
+            });
+            var marker = new google.map.Marker({
+                position: location,map: map
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5rClfebRKivltuiEJmS4BwXcXFO8Ir9Y&callback=initMap"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>  
+    
+    <div class="header">
+        <div class="container">
+            <div class="header-grid">
+                <div class="logo">
+                    <h1>Snaekey</h1>
+                    <h2>Crawling</h2>
+                </div>
+                <div class="Search">
+                    <input class="searctext" type="text"  placeholder="Searc">
+                    <button class="bntSearch"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="MenuProfile"> 
+                    <button class="btnprofile"><i class="fas fa-user-circle"></i></button>
+                    <div class="dropdown-menuprofile">
+                        <a href="profile.html">แก้ไขข้อมูลส่วนตัว</a>
+                        <a href="profile.html">แก้ไขข้อมูลร้านค้า</a>
+                        <a href="profile.html">รายการโปรด</a> 
+                        <a href="#">ออกจากระบบ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="Nav">
+        <div class="container">
+            <div class="nav-grid">
+                <div class="navMenu">
+                    <a href="Home.html">หน้าแรก</a>
+                    <a href="NewBands.html">สินค้าใหม่</a>
+                    <a href="#">แบรนด์</a>
+                 </div>
+                
+                 <div class="Rnav">
+                  <a href="#">ลงขาย</a>
+                  <a href="Registor.html">สมัครสมาชิก</a>
+                  <a href="login.html">เข้าสู่ระบบ</a>
+                </div>
+                </div>
+            </div>
+    </div>  
+    <div class="lineNav"></div>
+    <div class="register-maket">
+        <div class="container">
+            <div class="Greid-register-market">
+                <div class="Gride-right-register-market">
+                    <label class="tele-register-market">รายละเอียดข้อมูลผู้ขาย</label>
+                    <label class="tele-add-img-market">อัพโหลดโปรไพล์</label>
+                    <button class="add-img-market">
+                        <i class="fas fa-image"></i>
+                        <a class="tele-add-img">ใส่ได้ 1 รูป</a>
+                    </button>  
+                    <label class="tele-add-contact-market">ช่องทางติดต่อ(อย่างน้อยหนึ่งช่องทาง)</label>
+                    <div class="add-contact-market">
+                        <input class="add-contact-market-facebook" type="text"  placeholder="Facebook">
+                        <input class="add-contact-market-ig" type="text"  placeholder="Instagram">
+                        <input class="add-contact-market-LineID" type="text"  placeholder="LineID">
+                    </div>  
+                    <label class="tele-add-timeOpen-market">เวลาเปิดทำการหรือเวลาที่สามารถติดต่อ</label>
+                    <div class="add-timeOpen-market">
+                        <div class="drowdown-timeOpen">
+                            <select>
+                            <option value="">0:00</option>
+                            <option value="">1:00</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i> 
+                        </div>
+                        <div class="drowdown-timeClose">
+                        <select>
+                        <option value="">0:00</option>
+                        <option value="">1:00</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i> 
+                        </div>
+                    </div>    
+                    <div class="Application-conditions-market">
+                        <input type="radio" name="radioApplicationconditions" class="radio-Application-conditions">
+                        <label class="text-male">คุณยอมรับ นโยบายความเป็นส่วนตัว และ ข้อกำหนดการใช้ ของ Snakey Crawling</label>
+                    </div>
+                    <button href="add-product-pase2.html" class="accept-regiter-merket">ตกลง</button>
+                    <button class="cancle-regiter-merket">ยกเลิก</button>
+                </div>
+                <div class="Gride-left-register-market">
+                    <label class="tele-add-Name-market">ชื่อร้านค้าหรือชื่อผู้ขาย</label>
+                    <input class="textbox-add-name-market" type="text" >
+                    <label class="tele-add-IDcade-market">รหัสบัตรประชาชน</label>
+                    <input class="textbox-add-IDcade-market" type="text" >
+                    <label class="tele-add-contact-phone-market">เบอร์ติดต่อ</label>
+                    <input class="textbox-add-contact-phone-market" type="text" >
+                    <label class="tele-add-addaress-market">ตำแหน่งร้านหรือจุดรับสินค้า</label>
+                    <div class="add-addaress-market">
+                        <input type="radio" name="radioMarket" class="radio-market" >
+                        <label class="text-male">ร้านค้า</label>
+                        <input type="radio" name="radioAddaress" class= "radio-addaress">
+                        <label class="text-male">จุดรับสินค้า</label>
+                        <div class="gried-addaress-maket">
+                            <input class="textbox-add-addaress-market" type="text" placeholder="ที่อยู่">
+                            <input class="textbox-add-canton-market" type="text" placeholder="ตำบล/แขวง">
+                            <input class="textbox-add-district-market" type="text" placeholder="อำเภอ/เขต">
+                            <div class="drowdown-add-city">
+                                <select>
+                                <option value="">จังหวัด</option>
+                                <option value="">กรุงเทพ</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i> 
+                            </div>
+                            <input class="textbox-add-Postal-code-market" type="text" placeholder="รหัสไปรษณีย์">
+                        </div>
+
+                    </div>
+                    <label class="tele-add-Latitude-longitude-market">ตำแหน่งละติจูดและลองจิจูด</label>
+                    <div class="gried-Latitude-longitude-maket">
+                    <input class="textbox-add-Latitude-longitude-market" type="text">
+                            <div class="Latitude-longitude-market">
+                            <i class="fas fa-exclamation-circle"></i>  
+                            <label class="tele-Latitude-longitude-market">วิธีการหาตำแหน่งละติจูดและลองจิจูด</label>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+</body>
+</html>
