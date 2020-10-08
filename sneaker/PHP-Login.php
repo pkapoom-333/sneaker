@@ -20,14 +20,19 @@
         //$member_pwd = md5($member_pwd);
         $sql = "SELECT * From member Where member_email = '$member_email' AND member_pwd = '$member_pwd'";
         $re = mysqli_query($conn,$sql);
-        
         if(mysqli_num_rows($re) == 1){
-            echo "sleep ได้ละ";
+            $_SESSION['member_email'] = $member_email;
+            $_SESSION['successlogin'] = "login";
+            while($row = mysqli_fetch_array($re)){
+                $_SESSION['member_id']  = $row['member_id'];
+                $_SESSION['Show_name']  = "สวัสดี คุณ    ".$row['member_name']; 
+                header("location: login.php");
+            }
         }else{
-            echo $sql;
-            echo $member_email;
-            echo $member_pwd;
-
+            
+            array_push($errors,"Wrong username/password combination");
+            $_SESSION['error'] = "Wrong username or password try again!";
+            header("location: login.php");
 
         }
         
