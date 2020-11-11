@@ -51,8 +51,10 @@ session_start();
         $mrk_district = mysqli_real_escape_string($conn,$_POST['mrk_district']); 
         $mrk_city = mysqli_real_escape_string($conn,$_POST['mrk_city']);
         $mrk_zipcode = mysqli_real_escape_string($conn,$_POST['mrk_zipcode']);
-        $mrk_lt_location = mysqli_real_escape_string($conn,$_POST['mrk_lt_location']);
-        
+        $mrk_lat_location = mysqli_real_escape_string($conn,$_POST['mrk_lat_location']);
+        $mrk_lgt_location = mysqli_real_escape_string($conn,$_POST['mrk_lgt_location']);
+        $mrk_open = date('h:i:sa',$mrk_open);
+        $mrk_close = date('h:i:sa',$mrk_close);
         $SELECT = "SELECT * From market_info Where mrk_name = '$mrk_name'";
         $query = mysqli_query($conn, $SELECT);
         $result = mysqli_fetch_assoc($query);
@@ -68,10 +70,10 @@ session_start();
         if(count($errors) == 0){
          $mrk_id = $_SESSION['member_id'];
          $prd_id = $_SESSION['member_id'];
-         $timestamp_market = date("d-m-y");
+         $timestamp_market = date("d-m-Y");
          $rand = rand(1600,2000);
-          $sql = "INSERT Into market_info (mrk_id,mrk_pic,mrk_fb,mrk_ig,mrk_line,mrk_open,mrk_close,mrk_name, mrk_personal_id,mrk_phone,mrk_address,mrk_sub_district,mrk_district,mrk_city,mrk_zipcode,mrk_lt_location,prd_id,mrk_regis_time) 
-          values ('$mrk_id ' ,'$mrk_pic', '$mrk_fb', '$mrk_ig', '$mrk_line', '$mrk_open', '$mrk_close', '$mrk_name', '$mrk_personal_id', '$mrk_phone', '$mrk_address', '$mrk_sub_district', '$mrk_district', '$mrk_city', '$mrk_zipcode', '$mrk_lt_location','$prd_id','$timestamp_market')";  
+          $sql = "INSERT Into market_info (mrk_id,mrk_pic,mrk_fb,mrk_ig,mrk_line,mrk_open,mrk_close,mrk_name, mrk_personal_id,mrk_phone,mrk_address,mrk_sub_district,mrk_district,mrk_city,mrk_zipcode,mrk_lat_location,mrk_lgt_location,prd_id,mrk_regis_time) 
+          values ('$mrk_id ' ,'$mrk_pic', '$mrk_fb', '$mrk_ig', '$mrk_line', '$mrk_open', '$mrk_close', '$mrk_name', '$mrk_personal_id', '$mrk_phone', '$mrk_address', '$mrk_sub_district', '$mrk_district', '$mrk_city', '$mrk_zipcode', '$mrk_lat_location', '$mrk_lgt_location' ,'$prd_id','$timestamp_market')";  
           mysqli_query($conn,$sql);
           
           header("location: add-product-pase2.php");

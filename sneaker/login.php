@@ -1,12 +1,18 @@
 <?php
 session_start();
 include('connection.php');
-if(isset($_GET['logout'])){
+
+  if(isset($_GET['logout'])){
     session_destroy();
     unset($_SESSION['member_email']);
     unset($_SESSION['member_id']);
+    unset($_SESSION['Show_market']);
+    unset($_SESSION['add_market']);
     header("location: login.php");
   }
+
+
+
 ?>
 
 <!doctype html>
@@ -22,7 +28,7 @@ if(isset($_GET['logout'])){
     <script src="https://kit.fontawesome.com/7fefb669ea.js" crossorigin="anonymous"></script>
 
     <!--Custom Stylesheet-->
-    <link rel="stylesheet" href="./css/style-site.css"/>
+    <link rel="stylesheet" href="./css/style-project3.css"/>
     <link rel="stylesheet" href="./css/swiper.min.css"/>
 
     
@@ -56,16 +62,24 @@ if(isset($_GET['logout'])){
                     <h1>Snaekey</h1>
                     <h2>Crawling</h2>
                 </div>
+                <form action="PHP-Search.php" method="POST">
                 <div class="Search">
-                    <input class="searctext" type="text"  placeholder="Searc">
-                    <button class="bntSearch"><i class="fas fa-search"></i></button>
+                    <input class="searctext" type="text" name="Namesearch" placeholder="Searc">
+                    <button type="submit" class="bntSearch" name="search" ><i class="fas fa-search"></i></button>
                 </div>
+                </form>
                 <div class="MenuProfile"> 
-                    <button class="btnprofile"><i class="fas fa-user-circle"></i></button>
+                    <?php if (empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><a href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;">เข้าสู่ระบบ/สมัครสมาชิก</a></div>
+                    <?php endif ?>
+                    <?php if (!empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><label href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;"><?php echo $_SESSION['Show_name'];?> </label></div>
+                    <?php endif ?>
                     <div class="dropdown-menuprofile">
                         <?php if (isset($_SESSION['member_email'])) : ?>
-                          <a href="profile.php">แก้ไขข้อมูลส่วนตัว</a>
-                          <a href="profile.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="Registor-edit.php">แก้ไขข้อมูลส่วนตัว</a>
+                          <a href="Edit-product-pase1.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="profile.php">โปรไพล์</a>
                           <a href="Home.php?logout='1'">ออกจากระบบ</a>
                         <?php endif ?>
                     </div>
@@ -79,9 +93,16 @@ if(isset($_GET['logout'])){
                 <div class="navMenu">
                     <a href="Home.php">หน้าแรก</a>
                     <a href="NewBands.php">สินค้าใหม่</a>
-                    <a href="#">แบรนด์</a>
                  </div>
-                
+                 <div class="Menu-ฺband">แบรนด์
+                        <div class="dropdown-menuBand">
+                          <a href="Bands.php?Band=Nike">Nike</a>
+                          <a href="Bands.php?Band=Adidas">Adidas</a>
+                          <a href="Bands.php?Band=Vans">Vans</a>
+                          <a href="Bands.php?Band=Converse">Converse</a>
+                          <a href="Bands.php?Band=Fila">Fila</a>
+                        </div>
+                      </div>
                  <div class="Rnav">
                   <?php
                     if (isset($_SESSION['member_email'])){
@@ -99,12 +120,12 @@ if(isset($_GET['logout'])){
                     }  
                   ?>
                   <?php if (isset($_SESSION['Show_market'])) : ?>
-                  <a href="add-product-pase2.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="add-product-pase2.php">เพิ่มสินค้า</a>
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   <?php if (isset($_SESSION['add_market'])) : ?>
                   <a href="add-product-pase1.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   
                   <?php if (empty($_SESSION['member_email'])) : ?>
@@ -114,7 +135,7 @@ if(isset($_GET['logout'])){
                 </div>
                 </div>
             </div>
-    </div>
+    </div> 
     <div class="lineNav"></div>
     <div class="login">
      <div class="container-longin">
@@ -159,7 +180,12 @@ if(isset($_GET['logout'])){
             <div class="text-longin">Login Success</div> 
             <div class="Show_name">
                             <?php
-                                echo $_SESSION['Show_name'];
+                                if (isset($_SESSION['Edit'])){
+                                    echo $_SESSION['Show_name']; echo "  แก้ไขข้อมูลสำเร็จ";
+                                }
+                                if (empty($_SESSION['Edit'])){
+                                    echo $_SESSION['Show_name'];
+                                }
                             ?>  
                 </div>
             </div>     
@@ -168,7 +194,6 @@ if(isset($_GET['logout'])){
         
      </div>
     </div>
-    
     
 
 </body>

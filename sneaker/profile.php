@@ -1,6 +1,18 @@
 <?php
 session_start();
 include('connection.php');
+
+  if(isset($_GET['logout'])){
+    session_destroy();
+    unset($_SESSION['member_email']);
+    unset($_SESSION['member_id']);
+    unset($_SESSION['Show_market']);
+    unset($_SESSION['add_market']);
+    header("location: login.php");
+  }
+
+
+
 ?>
 <!doctype html>
 <html>
@@ -15,7 +27,7 @@ include('connection.php');
     <script src="https://kit.fontawesome.com/7fefb669ea.js" crossorigin="anonymous"></script>
 
     <!--Custom Stylesheet-->
-    <link rel="stylesheet" href="./css/style-site.css"/>
+    <link rel="stylesheet" href="./css/style-project3.css"/>
     <link rel="stylesheet" href="./css/swiper.min.css"/>
 
     
@@ -49,16 +61,24 @@ include('connection.php');
                     <h1>Snaekey</h1>
                     <h2>Crawling</h2>
                 </div>
+                <form action="PHP-Search.php" method="POST">
                 <div class="Search">
-                    <input class="searctext" type="text"  placeholder="Searc">
-                    <button class="bntSearch"><i class="fas fa-search"></i></button>
+                    <input class="searctext" type="text" name="Namesearch" placeholder="Searc">
+                    <button type="submit" class="bntSearch" name="search" ><i class="fas fa-search"></i></button>
                 </div>
+                </form>
                 <div class="MenuProfile"> 
-                    <button class="btnprofile"><i class="fas fa-user-circle"></i></button>
+                    <?php if (empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><a href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;">เข้าสู่ระบบ/สมัครสมาชิก</a></div>
+                    <?php endif ?>
+                    <?php if (!empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><label href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;"><?php echo $_SESSION['Show_name'];?> </label></div>
+                    <?php endif ?>
                     <div class="dropdown-menuprofile">
                         <?php if (isset($_SESSION['member_email'])) : ?>
-                          <a href="profile.php">แก้ไขข้อมูลส่วนตัว</a>
-                          <a href="profile.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="Registor-edit.php">แก้ไขข้อมูลส่วนตัว</a>
+                          <a href="Edit-product-pase1.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="profile.php">โปรไพล์</a>
                           <a href="Home.php?logout='1'">ออกจากระบบ</a>
                         <?php endif ?>
                     </div>
@@ -72,9 +92,16 @@ include('connection.php');
                 <div class="navMenu">
                     <a href="Home.php">หน้าแรก</a>
                     <a href="NewBands.php">สินค้าใหม่</a>
-                    <a href="#">แบรนด์</a>
                  </div>
-                
+                 <div class="Menu-ฺband">แบรนด์
+                        <div class="dropdown-menuBand">
+                          <a href="Bands.php?Band=Nike">Nike</a>
+                          <a href="Bands.php?Band=Adidas">Adidas</a>
+                          <a href="Bands.php?Band=Vans">Vans</a>
+                          <a href="Bands.php?Band=Converse">Converse</a>
+                          <a href="Bands.php?Band=Fila">Fila</a>
+                        </div>
+                      </div>
                  <div class="Rnav">
                   <?php
                     if (isset($_SESSION['member_email'])){
@@ -92,12 +119,12 @@ include('connection.php');
                     }  
                   ?>
                   <?php if (isset($_SESSION['Show_market'])) : ?>
-                  <a href="add-product-pase2.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="add-product-pase2.php">เพิ่มสินค้า</a>
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   <?php if (isset($_SESSION['add_market'])) : ?>
                   <a href="add-product-pase1.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   
                   <?php if (empty($_SESSION['member_email'])) : ?>
@@ -107,252 +134,156 @@ include('connection.php');
                 </div>
                 </div>
             </div>
-    </div>  
+    </div>   
     <div class="lineNav"></div>
     
     
     <div class="pase-profile">
         <div class="container">
             <div class="bar-profile">
-                <button class="button-profile-product">
+                <button onclick="location.href='profile.php';" class="button-profile-product">
                   สินค้าที่ลงขาย
                 </button>
-                <button class="button-profile-like-product">
+                <button  onclick="location.href='profile-like.php';" class="button-profile-like-product">
                     รายการโปรด
                   </button>
+            </div>     
                   <div class="gried-content-profile-bar">
-                        <div class="left-bar-profile">
-                            <div class="profile-sell-img">
-                            <a href="#"><img src="./product/2.png" alt="Seller-img" class="Seller-img"></a>
-                            </div>
-                            <div class="profile-sell-text">
-                            <a href="#" class="Date-Seller">ร้าน Snakey</a>
-                            <a href="#" class="Date-Seller">เป็นสมาชิกมาแล้ว 1 ปี 4 เดือน 8 วัน</a>
-                            <a href="#" class="Date-Seller">เรตติ้ง : ดีมาก</a>
-                            <a href="#" class="Date-Seller">เปิดทำการ: 10.00 น. - 21.00 น. </a>
-                            <a href="#" class="Date-Seller">เบอร์โทรติดต่อ: 024794547</a>
-                            </div>
-                        </div>
-                        <div class="right-bar-profile">
-                           <div class="gried-bar-ratting">
-                            <a class="bar-content-ratting">เรตติ้ง : ดีมาก</a>
-                            <div class="bar-content-icon-ratting">
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                           </div>  
-                         <div class="gried-bar-contect"> 
-                           <div class="bar-facebook-profile">
-                                <i class="fab fa-facebook"></i>
-                                <a class="tele-facebook-product">Snakey</a>     
-                            </div>
-                            <div class="bar-ig-profile">
-                                <i class="fab fa-instagram-square"></i>
-                                <a class="tele-ig-product">Snakey_ig</a>
-                            </div>
-                            <div class="bar-line-peofile">
-                                <i class="fab fa-line"></i>
-                                <a class="tele-line-product">@line_Snakey</a>
-                            </div>
-                        </div>
+                                <?php
+                                    if (!empty($_SESSION['member_id'])) {
+                                        $id_market = $_SESSION['member_id'];
+                                         $res_maket = $conn->query("SELECT * From market_info Where mrk_id  = '$id_market'");
+                                         $res_maket_Product = $conn->query("SELECT * FROM product WHERE id_market  = '$id_market'");
+                                         $countview=0.00;
+                                         $Sumreview=0.00;
+                                         $AVreview=0.00;  
+                                         $countrow=0;
+                                         while($row = $res_maket_Product->fetch_assoc()){
+                                             $countrow++;
+                                             $Sumreview = $Sumreview +$row['prd_review'];
+                                             $countview++;
+                                             $countrow++;
+                                             if($countview>0){
+                                                 $AVreview = $Sumreview/$countview;
+                                                 $Updaterating = "UPDATE market_info SET mrk_count_prd = '$AVreview'  Where mrk_id = '$id_market' ";
+                                                 mysqli_query($conn,$Updaterating);
+                                             }
+                                         }  
+                                    } 
+
+                                ?>
+                                <?php while($row = $res_maket->fetch_array()):?>
+                                <div class="left-bar-profile">
+                                    <div class="profile-sell-img">
+                                    <a href="#"><img src='uploadprofile/<?= $row["mrk_pic"]?>' alt="Seller-img" class="Seller-img"></a>
+                                    </div>
+                                    <div class="profile-sell-text">
+                                    <a href="#" class="Date-Seller">ลงขายโดย :<?= $row["mrk_name"]?></a>
+                                    <a href="#" class="Date-Seller">เป็นสมาชิกตั้งแต่ :<?= $row["mrk_regis_time"]?></a>
+                                    <a href="#" class="Date-Seller">เรตติ้ง : ดีมาก</a>
+                                    <a href="#" class="Date-Seller">เปิดทำการ: <?= $row["mrk_open"]?> - <?= $row["mrk_open"]?></a>
+                                    <a href="#" class="Date-Seller">เบอร์โทรติดต่อ: <?= $row["mrk_phone"]?></a>
+                                    </div>
+                                </div>
+                                <div class="right-bar-profile">
+                                <div class="gried-bar-ratting">
+                                    <a class="bar-content-ratting">เรตติ้ง : ดีมาก</a>
+                                    <div class="bar-content-icon-ratting">
+                                    <?php if ($row["mrk_count_prd"]==5.00) : ?>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>  
+                                    <?php endif ?> 
+                                    <?php if ($row["mrk_count_prd"]>=4.00&&$row["mrk_count_prd"]<=4.99) : ?>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i> 
+                                    <?php endif ?> 
+                                    <?php if ($row["mrk_count_prd"]>=3.00&&$row["mrk_count_prd"]<=3.99) : ?>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="fas fa-star"style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <?php endif ?> 
+                                    <?php if ($row["mrk_count_prd"]>=2.00&&$row["mrk_count_prd"]<=2.99) : ?>
+                                    <i class="fas fa-star"style="color: #021F54;"></i>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <?php endif ?> 
+                                    <?php if ($row["mrk_count_prd"]>=0.00&&$row["mrk_count_prd"]<=1.99) : ?>
+                                    <i class="fas fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <i class="far fa-star" style="color: #021F54;"></i>
+                                    <?php endif ?>
+                                    </div>
+                                </div>  
+                                <div class="gried-bar-contect"> 
+                                <div class="bar-facebook-profile">
+                                        <i class="fab fa-facebook"></i>
+                                        <a class="tele-facebook-product"><?= $row["mrk_fb"]?></a>     
+                                    </div>
+                                    <div class="bar-ig-profile">
+                                        <i class="fab fa-instagram-square"></i>
+                                        <a class="tele-ig-product"><?= $row["mrk_line"]?></a>
+                                    </div>
+                                    <div class="bar-line-peofile">
+                                        <i class="fab fa-line"></i>
+                                        <a class="tele-line-product"><?= $row["mrk_ig"]?></a>
+                                    </div>
+                                </div>
+                                <?php endwhile; ?> 
+                        
                     </div>
                  
             </div>
-            <div class="line-bar-profile"></div> 
+           <div class="line-bar-profile"></div> 
             <div class="profile-product">
                 <div class="gried-profile-product">
-                    <button class="add-product">
+                    <button onclick="location.href='add-product-pase2.php';" class="add-product">
                         <i class="fas fa-plus"></i>
                         <label class="text-add-product">เพิ่มสินค้า</label> 
                     </button> 
+                    <?php
+                    if (!empty($_SESSION['member_id'])) {
+                        $id_market = $_SESSION['member_id'];
+                        $res_file_market = $conn->query("SELECT * From market_info Where mrk_id = '$id_market'");
+                            while($row = $res_file_market->fetch_array()){
+                                      $id_market = $row['mrk_id']; 
+                                      $mrk_name = $row["mrk_name"]; 
+                            }
+                            $res_maket_Product = $conn->query("SELECT * FROM product WHERE id_market  = '$id_market'");
+                    
+                    } 
+                    ?>
+                    <?php while($row = $res_maket_Product->fetch_assoc()):?>
                     <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div>
-                    </div>
-                    <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div>   
-                    </div>
-                    <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div> 
-                    </div> 
-                    <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div>
-                    </div>
-                        <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
+                        <a href="pase-product-test.php?show=<?php echo $row["prd_id"];?>"><img src='upload/<?= $row["img1"]?>' alt="product1" class="img-product-onehands"></a> 
+                        <a href="pase-product-test.php?show=<?php echo $row["prd_id"];?>" class="Nameproduct"><?= $row["prd_name"]?></a>
+                        <a href="pase-product-test.php?show=<?php echo $row["prd_id"];?>" class="NameSell">ลงขายโดย : <?= $mrk_name?></a>
                         <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div>  
-                        </div>
-                        <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div> 
-                        </div> 
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div>  
+                        <a href="Edit-product-pase2.php?Eait=<?php echo $row["prd_id"];?>" class="button-edit-product">
+                            <i href="Edit-product-pase2.php?Eait=<?php echo $row["prd_id"];?>" class="fas fa-edit"></i>
+                            <label href="Edit-product-pase2.php?Eait=<?php echo $row["prd_id"];?>" class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
+                        </a>
+                        <a href="pase-product-test.php?show=<?php echo $row["prd_id"];?>" class="PiceProduct-show"><?= $row["prd_price"]?> บาท</a> 
+                        </div>   
                     </div>
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div> 
-                    </div>
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div>  
-                    </div> 
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div> 
-                    </div>
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div> 
-                    </div>
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div>  
-                    </div> 
-                    <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div>
-                    </div>
-                    <div class="item-show">
-                    <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                    <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                    <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                    <div class="gried-edit-pice">
-                        <button class="button-edit-product">
-                            <i class="fas fa-edit"></i>
-                            <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                        </button>
-                        <a href="#" class="PiceProduct-show">4500B</a> 
-                    </div>
-                    </div>  
-                    <div class="item-show">
-                        <a href="#"><img src="./product/1.png" alt="product1" class="img-product-onehands"></a> 
-                        <a href="#" class="Nameproduct">Nike Air Max 270 React ENG</a>
-                        <a href="#" class="NameSell">ลงขายโดย : ร้าน Snakey</a>
-                        <div class="gried-edit-pice">
-                            <button class="button-edit-product">
-                                <i class="fas fa-edit"></i>
-                                <label class="text-edit-product">แก้ไขรายละเอียดสินค้า</label>
-                            </button>
-                            <a href="#" class="PiceProduct-show">4500B</a> 
-                        </div> 
-                    </div> 
+                    <?php endwhile; ?>
                 </div>
             </div>
         </div>
 
     </div>
-
-</body>
+    <div class="Footter">
+    </div>
+</body>                 
 </html>

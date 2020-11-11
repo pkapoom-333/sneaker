@@ -36,6 +36,17 @@ session_start();
         $query = mysqli_query($conn, $SELECT);
         $result = mysqli_fetch_assoc($query);
         
+        if($result){
+            if($result['member_email'] == $member_email){
+             array_push($errors,"member_email "); 
+             $_SESSION['error'] ="Email have already now!";
+             header("location: Registor.php");
+            }
+             
+        }
+        
+       
+            
         
         $query_id = "SELECT member_id From member ";
         $res = mysqli_query($conn,$query_id);
@@ -55,12 +66,13 @@ session_start();
         }
         if(count($errors) == 0){
           $timestamp = date("Y-m-d H:i:s");   
-          $sql = "INSERT Into member (member_id,member_email, member_pwd, member_name, member_lstname, member_phone, member_gender,mrk_regis_time,mrk_id) values ( '$billnumber','$member_email', '$member_pwd', '$member_name', '$member_lstname', '$member_phone', '$member_gender','$timestamp','$billnumber')";  
+          $sql = "INSERT Into member (member_id,member_email, member_pwd, member_name, member_lstname, member_phone, member_gender,mrk_id) values ( '$billnumber','$member_email', '$member_pwd', '$member_name', '$member_lstname', '$member_phone', '$member_gender','$billnumber')";  
           mysqli_query($conn,$sql);
            $_SESSION['member_email'] = $member_email;
            $_SESSION['member_id']  = $billnumber;
            $_SESSION['success'] = "Logged in";
-           header("location: home.php");
+           $_SESSION['Show_name']= "สวัสดี คุณ    ".$member_name;
+           header("location: login.php");
 
         }
 

@@ -165,20 +165,25 @@
         }
         
         if ($prd_type == "Null"){
-            //echo "Error prd_type";
+             array_push($errors,"กรุณาเลือกประเภท"); 
+             header("location: add-product-pase2.php");
+             $_SESSION['error-type'] = "กรุณาเลือกประเภท";
         }
         if ($prd_brand == "Null"){
-            //echo "Error prd_brand";
+            array_push($errors,"กรุณาเลือกแบรนด์สินค้า"); 
+            header("location: add-product-pase2.php");
+            $_SESSION['error-band'] = "Error!";
         }
         if ($prd_status == "Null"){
-            //echo "Error prd_status";
+            array_push($errors,"กรุณาเลือกสภาพสินค้า"); 
+            header("location: add-product-pase2.php");
+            $_SESSION['error-status'] = "Error!";
         }
 
         if(count($errors) == 0){
             $review_id = 0;
             $id_market = $_SESSION['member_id'];
-            //echo $id_market;
-            $timestamp = date("Y-m-d H:i:s"); 
+            $timestamp = date("d-m-Y H:i:s"); 
             $on_prd = $timestamp;
             $update_prd = $timestamp;
             $prd_count_review = 0;
@@ -192,8 +197,8 @@
                 //echo $prd_Name_Maket ; 
             }
             
-            $sql_product = "INSERT Into product (prd_id,prd_name, prd_brand, prd_type, prd_status, prd_price, prd_gender,prd_detail,img1,img2, img3, img4, img5, img6,size_39, size_40, size_40_5, size_41,size_41_5,size_42,size_42_5, size_43, size_44, size_44_5,size_46,size_47,size_47_5,id_market,on_prd,update_prd,prd_count_review,review_id,prd_Name_Maket) 
-            values ( '$billnumber_product','$prd_name','$prd_brand', '$prd_type', '$prd_status', '$prd_price', '$prd_gender', '$prd_detail','$fileNameNewIMG1','$fileNameNewIMG2','$fileNameNewIMG3', '$fileNameNewIMG4', '$fileNameNewIMG5', '$fileNameNewIMG6', '$size_39', '$size_40', '$size_40_5', '$size_41', '$size_41_5','$size_42','$size_42_5','$size_43', '$size_44', '$size_44_5', '$size_46', '$size_47', '$size_47_5', '$id_market', '$on_prd', '$update_prd','$prd_count_review','$review_id','$prd_Name_Maket')";  
+            $sql_product = "INSERT Into product (prd_id,prd_name, prd_brand, prd_type, prd_status, prd_price, prd_gender,prd_detail,img1,img2, img3, img4, img5, img6,size_39, size_40, size_40_5, size_41,size_41_5,size_42,size_42_5, size_43, size_44, size_44_5,size_46,size_47,size_47_5,id_market,on_prd,update_prd,review_id) 
+            values ( '$billnumber_product','$prd_name','$prd_brand', '$prd_type', '$prd_status', '$prd_price', '$prd_gender', '$prd_detail','$fileNameNewIMG1','$fileNameNewIMG2','$fileNameNewIMG3', '$fileNameNewIMG4', '$fileNameNewIMG5', '$fileNameNewIMG6', '$size_39', '$size_40', '$size_40_5', '$size_41', '$size_41_5','$size_42','$size_42_5','$size_43', '$size_44', '$size_44_5', '$size_46', '$size_47', '$size_47_5', '$id_market', '$on_prd', '$update_prd','$review_id')";  
             mysqli_query($conn,$sql_product);
             
             //echo "/55555555555555555555555555555555555555555555555555555555555555555555555";

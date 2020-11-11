@@ -1,12 +1,18 @@
 <?php
 session_start();
 include('connection.php');
-if(isset($_GET['logout'])){
+
+  if(isset($_GET['logout'])){
     session_destroy();
     unset($_SESSION['member_email']);
     unset($_SESSION['member_id']);
+    unset($_SESSION['Show_market']);
+    unset($_SESSION['add_market']);
     header("location: login.php");
   }
+
+
+
 ?>
 <!doctype html>
 <html>
@@ -21,7 +27,7 @@ if(isset($_GET['logout'])){
     <script src="https://kit.fontawesome.com/7fefb669ea.js" crossorigin="anonymous"></script>
 
     <!--Custom Stylesheet-->
-    <link rel="stylesheet" href="./css/style-site.css"/>
+    <link rel="stylesheet" href="./css/style-project3.css"/>
     <link rel="stylesheet" href="./css/swiper.min.css"/>
 
     <style>
@@ -80,16 +86,24 @@ input[type=number] {
                     <h1>Snaekey</h1>
                     <h2>Crawling</h2>
                 </div>
+                <form action="PHP-Search.php" method="POST">
                 <div class="Search">
-                    <input class="searctext" type="text"  placeholder="Searc">
-                    <button class="bntSearch"><i class="fas fa-search"></i></button>
+                    <input class="searctext" type="text" name="Namesearch" placeholder="Searc">
+                    <button type="submit" class="bntSearch" name="search" ><i class="fas fa-search"></i></button>
                 </div>
+                </form>
                 <div class="MenuProfile"> 
-                    <button class="btnprofile"><i class="fas fa-user-circle"></i></button>
+                    <?php if (empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><a href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;">เข้าสู่ระบบ/สมัครสมาชิก</a></div>
+                    <?php endif ?>
+                    <?php if (!empty($_SESSION['member_email'])) : ?>
+                    <div href="login.php" class="btnprofile"><i class="fas fa-user-circle"></i><label href="login.php" style="width:200px; hight:50px; color: white; margin-left: 5px;"><?php echo $_SESSION['Show_name'];?> </label></div>
+                    <?php endif ?>
                     <div class="dropdown-menuprofile">
                         <?php if (isset($_SESSION['member_email'])) : ?>
-                          <a href="profile.php">แก้ไขข้อมูลส่วนตัว</a>
-                          <a href="profile.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="Registor-edit.php">แก้ไขข้อมูลส่วนตัว</a>
+                          <a href="Edit-product-pase1.php">แก้ไขข้อมูลร้านค้า</a>
+                          <a href="profile.php">โปรไพล์</a>
                           <a href="Home.php?logout='1'">ออกจากระบบ</a>
                         <?php endif ?>
                     </div>
@@ -103,9 +117,16 @@ input[type=number] {
                 <div class="navMenu">
                     <a href="Home.php">หน้าแรก</a>
                     <a href="NewBands.php">สินค้าใหม่</a>
-                    <a href="#">แบรนด์</a>
                  </div>
-                
+                 <div class="Menu-ฺband">แบรนด์
+                        <div class="dropdown-menuBand">
+                          <a href="Bands.php?Band=Nike">Nike</a>
+                          <a href="Bands.php?Band=Adidas">Adidas</a>
+                          <a href="Bands.php?Band=Vans">Vans</a>
+                          <a href="Bands.php?Band=Converse">Converse</a>
+                          <a href="Bands.php?Band=Fila">Fila</a>
+                        </div>
+                      </div>
                  <div class="Rnav">
                   <?php
                     if (isset($_SESSION['member_email'])){
@@ -123,12 +144,12 @@ input[type=number] {
                     }  
                   ?>
                   <?php if (isset($_SESSION['Show_market'])) : ?>
-                  <a href="add-product-pase2.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="add-product-pase2.php">เพิ่มสินค้า</a>
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   <?php if (isset($_SESSION['add_market'])) : ?>
                   <a href="add-product-pase1.php">ลงขาย</a>
-                  <a href="profile.php">รายการโปรด</a> 
+                  <a href="profile-like.php">รายการโปรด</a> 
                   <?php endif ?> 
                   
                   <?php if (empty($_SESSION['member_email'])) : ?>
@@ -138,7 +159,7 @@ input[type=number] {
                 </div>
                 </div>
             </div>
-    </div> 
+    </div>  
     <div class="lineNav"></div>
     <div class="register-product">
         <form action="PHP-addproduct2.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()" required> 
@@ -156,6 +177,12 @@ input[type=number] {
                     </div>
                     <div class="add-band-product">
                         <label class="tele-add-band-product">แบรนด์</label>
+                        <?php if (isset($_SESSION['error-band'])) : ?>
+                        <div style="color: red;" >*กรุณาเลือกแบรนด์สินค้า</div>  
+                                    <?php
+                                        unset($_SESSION['error-band']);
+                                    ?>  
+                        <?php endif ?>
                         <div class="drowdown-ฺband-product"placeholder="แบรนด์">
                         <select name="prd_brand">
                         <option value="Null">แบรนด์</option>
@@ -171,6 +198,12 @@ input[type=number] {
                     <div class="gried-Type-Condition-pice-gender">
                       <div class="add-Type-product">
                         <label class="tele-add-Type-product">ประเภทรองเท้า</label>
+                        <?php if (isset($_SESSION['error-type'])) : ?>
+                        <div style="color: red;" >*กรุณาเลือกประเภทสินค้า</div>  
+                                    <?php
+                                        unset($_SESSION['error-type']);
+                                    ?>  
+                        <?php endif ?>   
                         <div class="drowdown-ฺType-product">
                             <select name="prd_type" >
                             <option value="Null">ประเภทสินค้า</option>
@@ -185,6 +218,12 @@ input[type=number] {
                       </div>  
                       <div class="add-Condition-product">
                         <label class="tele-add-Condition-product">สภาพสินค้า</label>
+                        <?php if (isset($_SESSION['error-status'])) : ?>
+                        <div style="color: red;" >*กรุณาเลือกสภาพสินค้าสินค้า</div>  
+                                    <?php
+                                        unset($_SESSION['error-status']);
+                                    ?>  
+                        <?php endif ?>
                            <div class="drowdown-Condition-product">
                             <select name="prd_status" >
                             <option value="Null">ประเภทสินค้า</option>
